@@ -5,8 +5,8 @@ let realMadridScore = 0; // Score for Real Madrid (always 0)
 let ball = {
   x: 400,
   y: 250,
-  xSpeed: random(-3, 3),
-  ySpeed: random(-3, 3),
+  xSpeed: 2,
+  ySpeed: 2,
   diameter: 15,
 };
 
@@ -19,12 +19,12 @@ let barcelonaPlayers = [];
 let realMadridPlayers = [];
 
 // Player constructor
-function Player(x, y, teamColor) {
+function Player(x, y, xSpeed, ySpeed, teamColor) {
   this.x = x;
   this.y = y;
+  this.xSpeed = xSpeed;
+  this.ySpeed = ySpeed;
   this.teamColor = teamColor;
-  this.xSpeed = random(-2, 2);
-  this.ySpeed = random(-2, 2);
 
   this.move = function () {
     this.x += this.xSpeed;
@@ -47,12 +47,28 @@ function setup() {
 
   // Initialize Barcelona players
   for (let i = 0; i < 5; i++) {
-    barcelonaPlayers.push(new Player(random(50, 375), random(50, 450), color(255, 0, 0))); // Red team
+    barcelonaPlayers.push(
+      new Player(
+        100 + i * 50, // Horizontal spacing
+        100 + i * 50, // Vertical spacing
+        1 + i % 2,    // Deterministic speed in x
+        1 - i % 2,    // Deterministic speed in y
+        color(255, 0, 0) // Red team
+      )
+    );
   }
 
   // Initialize Real Madrid players
   for (let i = 0; i < 5; i++) {
-    realMadridPlayers.push(new Player(random(425, 750), random(50, 450), color(0, 0, 255))); // Blue team
+    realMadridPlayers.push(
+      new Player(
+        600 + i * 30, // Horizontal spacing
+        100 + i * 50, // Vertical spacing
+        -1 - i % 2,   // Deterministic speed in x
+        1 - i % 2,    // Deterministic speed in y
+        color(0, 0, 255) // Blue team
+      )
+    );
   }
 
   // Increment Barcelona's score every second
@@ -139,8 +155,8 @@ function moveBall() {
 function resetBall() {
   ball.x = 400;
   ball.y = 250;
-  ball.xSpeed = random(-3, 3);
-  ball.ySpeed = random(-3, 3);
+  ball.xSpeed = 2; // Reset speed to default
+  ball.ySpeed = 2;
 }
 
 // Function to move a goalkeeper between a range
